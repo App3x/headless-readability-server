@@ -44,6 +44,7 @@ async function getArticleContent(url) {
                 ) {
                     request.abort();
                 } else {
+                    console.log(`requested ${request.url()}`);
                     request.continue();
                 }
             });
