@@ -34,12 +34,13 @@ async function getArticleContent(url) {
     }
 
     let page;
+    const requestedResources = new Set();
+
     try {
         page = await browser.newPage();
         if (disableImages) {
             await page.setRequestInterception(true);
 
-            const requestedResources = new Set();
 
             page.on('request', request => {
                 if (request.url().endsWith('/__webpack_hmr') ||
@@ -54,7 +55,7 @@ async function getArticleContent(url) {
             });
             page.on('console', message =>
                     console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-                .on('pageerror', ({ message }) => console.log(message, requestedResources))
+                .on('pageerror', ({ message }) => console.log(message))
                 .on('response', response => {
                     requestedResources.delete(response.url());
                     console.log(`${response.status()} ${response.url()}`)})
@@ -77,7 +78,7 @@ async function getArticleContent(url) {
         await page.close();
         return article;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error, requestedResources);
         if (page) {
             await page.close();
         }
