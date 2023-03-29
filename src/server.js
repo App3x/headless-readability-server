@@ -1,8 +1,8 @@
 const express = require('express')
-const puppeteer = require('puppeteer')
+const puppeteer = require("puppeteer-core");
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chromium')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,10 +13,10 @@ async function initBrowser() {
         browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath,
+            executablePath: await chromium.executablePath(),
             headless: chromium.headless,
-            ignoreHTTPSErrors: true,
         });
+
         console.log('Browser launched successfully');
     } catch (error) {
         console.error('Error launching browser:', error);
