@@ -1,5 +1,5 @@
 const express = require('express')
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
 const chromium = require('@sparticuz/chromium')
@@ -7,6 +7,7 @@ const chromium = require('@sparticuz/chromium')
 const app = express();
 const port = process.env.PORT || 3000;
 let browser
+const disableImages = true
 
 async function initBrowser() {
     try {
@@ -15,6 +16,7 @@ async function initBrowser() {
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
+            ignoreHTTPSErrors: true
         });
 
         console.log('Browser launched successfully');
@@ -24,6 +26,7 @@ async function initBrowser() {
 }
 
 async function getArticleContent(url) {
+    console.log('Got request for url:', url);
     if (!browser) {
         console.error('Browser not initialized');
         return;
@@ -32,6 +35,23 @@ async function getArticleContent(url) {
     let page;
     try {
         page = await browser.newPage();
+        if (disableImages) {
+            await page.setRequestInterception(true);
+            page.on('request', request => {
+                if (['stylesheet', 'image', 'media', 'font'].includes(request.resourceType())) {
+                    request.abort();
+                } else {
+                    request.continue();
+                }
+            });
+            page.on('console', message =>
+                    console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+                .on('pageerror', ({ message }) => console.log(message))
+                .on('response', response =>
+                    console.log(`${response.status()} ${response.url()}`))
+                .on('requestfailed', request =>
+                    console.log(`${request.failure().errorText} ${request.url()}`))
+        }
 
         await page.goto(url, {
             waitUntil: 'networkidle0',
