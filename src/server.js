@@ -54,12 +54,12 @@ async function getArticleContent(url) {
             });
             page.on('console', message =>
                     console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-                .on('pageerror', ({ message }) => console.log(message))
+                .on('pageerror', ({ message }) => console.log(message, requestedResources))
                 .on('response', response => {
                     requestedResources.delete(response.url());
                     console.log(`${response.status()} ${response.url()}`)})
                 .on('requestfailed', request =>
-                    console.log(`${request.failure().errorText} ${request.url()}`, requestedResources))
+                    console.log(`${request.failure().errorText} ${request.url()}`))
         }
 
         await page.goto(url, {
