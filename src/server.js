@@ -3,6 +3,7 @@ const puppeteer = require("puppeteer");
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
 const chromium = require('@sparticuz/chromium')
+const createDOMPurify = require('dompurify');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -55,12 +56,14 @@ async function getArticleContent(url) {
 
         await page.goto(url, {
             waitUntil: 'networkidle0',
-            timeout: 30000,
+            timeout: 60000,
         });
 
         const content = await page.content();
-        const document = new JSDOM(content).window.document;
-        const reader = new Readability(document);
+        const window = new JSDOM('').window;
+        const DOMPurify = createDOMPurify(window);
+        const clean = DOMPurify.sanitize(content);
+        const reader = new Readability(new JSDOM(clean).window.document);
         const article = reader.parse();
 
         await page.close();
