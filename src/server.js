@@ -2,6 +2,7 @@ const express = require('express')
 const puppeteer = require('puppeteer')
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
+const chromium = require('chrome-aws-lambda');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,7 +10,13 @@ let browser
 
 async function initBrowser() {
     try {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath,
+            headless: chromium.headless,
+            ignoreHTTPSErrors: true,
+        });
         console.log('Browser launched successfully');
     } catch (error) {
         console.error('Error launching browser:', error);
