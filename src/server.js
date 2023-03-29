@@ -39,7 +39,9 @@ async function getArticleContent(url) {
         if (disableImages) {
             await page.setRequestInterception(true);
             page.on('request', request => {
-                if (['stylesheet', 'image', 'media', 'font'].includes(request.resourceType())) {
+                if (request.url().endsWith('/__webpack_hmr') ||
+                    ['stylesheet', 'image', 'media', 'font'].includes(request.resourceType())
+                ) {
                     request.abort();
                 } else {
                     request.continue();
