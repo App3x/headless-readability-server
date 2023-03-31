@@ -15,7 +15,7 @@ const disableImages = true
 async function initBrowser() {
     try {
         browser = await puppeteer.launch({
-            args: chromium.args,
+            args: [...chromium.args, '--single-process'],
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
