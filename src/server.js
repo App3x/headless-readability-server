@@ -9,15 +9,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 let browser
 const disableImages = true
+chromium.setHeadlessMode = true;
+chromium.setGraphicsMode = false;
 
 async function initBrowser() {
     try {
         browser = await puppeteer.launch({
-            args: [
-                ...chromium.args,
-                "--proxy-server='direct://'",
-                '--proxy-bypass-list=*'
-            ],
+            args: chromium.args,
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
