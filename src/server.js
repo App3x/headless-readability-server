@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 let browser
 const disableImages = true
-chromium.setHeadlessMode = true;
+// chromium.setHeadlessMode = true;
 chromium.setGraphicsMode = false;
 
 async function initBrowser() {
