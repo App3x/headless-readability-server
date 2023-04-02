@@ -8,7 +8,7 @@ const createDOMPurify = require('dompurify');
 const app = express();
 const port = process.env.PORT || 3000;
 let browser
-const disableImages = true
+const disableImages = false
 // chromium.setHeadlessMode = true;
 // chromium.setGraphicsMode = false;
 console.log('chromium.args', chromium.args);
@@ -67,8 +67,8 @@ async function getArticleContent(url) {
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36')
 
         await page.goto(url, {
-            waitUntil: 'networkidle0',
-            timeout: 60000,
+            waitUntil: 'networkidle2',
+            timeout: 30000,
         });
 
         const content = await page.content();
