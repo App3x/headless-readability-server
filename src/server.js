@@ -88,6 +88,8 @@ async function getArticleContent(url) {
     }
 }
 
+await initBrowser();
+
 app.get('/get', async (req, res) => {
     const url = req.query.url
 
@@ -107,9 +109,9 @@ app.get('/get', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+
+app.listen(port, async () => {
     console.log(`Server is running on port ${port}`);
-    initBrowser();
 });
 
 
