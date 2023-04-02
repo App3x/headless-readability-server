@@ -29,11 +29,13 @@ async function initBrowser() {
 }
 
 async function getArticleContent(url) {
-    console.log('Got request for url:', url);
-    if (!browser) {
-        console.error('Browser not initialized');
-        return;
-    }
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true
+    });
 
     let page;
     const requestedResources = new Set();
@@ -89,7 +91,7 @@ async function getArticleContent(url) {
 }
 
 app.get('/get', async (req, res) => {
-    await initBrowser();
+    // await initBrowser();
 
     const url = req.query.url
 
