@@ -1,5 +1,5 @@
 const express = require('express')
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
 const chromium = require('@sparticuz/chromium')
