@@ -88,9 +88,9 @@ async function getArticleContent(url) {
     }
 }
 
-await initBrowser();
-
 app.get('/get', async (req, res) => {
+    await initBrowser();
+
     const url = req.query.url
 
     if (!url) {
