@@ -1,5 +1,5 @@
 const express = require('express')
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const { Readability } = require('@mozilla/readability')
 const { JSDOM } = require('jsdom')
 const chromium = require('@sparticuz/chromium')
@@ -11,7 +11,7 @@ let browser
 const disableImages = true
 // chromium.setHeadlessMode = true;
 // chromium.setGraphicsMode = false;
-// console.log('chromium.args', chromium.args);
+console.log('chromium.args', chromium.args);
 async function initBrowser() {
     try {
         browser = await puppeteer.launch({
