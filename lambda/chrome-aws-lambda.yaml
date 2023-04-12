@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  chromeawslambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs16.x
+      CodeUri: .
+      Description: ''
+      MemorySize: 1536
+      Timeout: 15
+      Role: >-
+        arn:aws:iam::119163579635:role/service-role/chrome-aws-lambda-role-nne8qwng
+      Layers:
+        - 'arn:aws:lambda:eu-central-1:764866452798:layer:chrome-aws-lambda:31'
+      RuntimePolicy:
+        UpdateRuntimeOn: Auto
