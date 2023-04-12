@@ -12,7 +12,6 @@ async function getArticleContent(url) {
     const content = await fetch(`https://lzoioknvwbidrp6zvey5wnf3lu0nijnt.lambda-url.eu-central-1.on.aws?disableImages=true&url=${encodeURIComponent(url)}`, {
         method: 'GET'
     }).then(res => {
-        console.log(res)
         return res.json()
     })
 
@@ -33,7 +32,7 @@ app.get('/get', async (req, res) => {
     try {
         const article = await getArticleContent(url);
         if (article) {
-            res.json({ title: article.title, content: article.content });
+            res.json({ title: article.title, content: article.textContent });
         } else {
             res.status(500).json({ error: 'Failed to extract article content' });
         }
