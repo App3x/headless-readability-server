@@ -17,9 +17,11 @@ async function getArticleContent(url) {
 
     const window = new JSDOM('').window;
     const DOMPurify = createDOMPurify(window);
-    const clean = DOMPurify.sanitize(content.result);
+    const clean = DOMPurify.sanitize(content.content);
     const reader = new Readability(new JSDOM(clean).window.document);
-    return reader.parse();
+    const result = reader.parse();
+
+    return { content: result.textContent, title: result.title || content.title }
 }
 
 app.get('/get', async (req, res) => {
@@ -32,7 +34,7 @@ app.get('/get', async (req, res) => {
     try {
         const article = await getArticleContent(url);
         if (article) {
-            res.json({ title: article.title, content: article.textContent });
+            res.json(article);
         } else {
             res.status(500).json({ error: 'Failed to extract article content' });
         }
